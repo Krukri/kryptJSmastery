@@ -28,21 +28,14 @@ export const TransactionProvider = ({ children }) => {
   const [currentAccount, setcurrentAccount] = useState("");
 
   const checkIfWalletIsConnected = async () => {
-    try {
-      if (!ethereum) return alert("Please install Metamask");
+    if (!ethereum) return alert("Please install Metamask");
 
-      const accounts = await ethereum.request({ method: "eth_accounts" });
-
-      if (accounts.length) {
-        setCurrentAccount(accounts[0]);
-        //getAllTransactions();
-      } else {
-        console.log("No accounts found.");
-      }
-    } catch (error) {
-      console.log(error);
-      throw new Error("No ethereum object.");
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+    if (accounts.length) {
+      setcurrentAccount(accounts[0]);
     }
+
+    console.log(accounts);
   };
 
   //code below will connect the app to the local metamask ethereum wallet
