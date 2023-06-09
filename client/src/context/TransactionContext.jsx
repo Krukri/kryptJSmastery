@@ -25,17 +25,38 @@ const getEthereumContract = () => {
 };
 
 export const TransactionProvider = ({ children }) => {
-  const [currentAccount, setcurrentAccount] = useState("");
+  const [currentAccount, setCurrentAccount] = useState("");
+
+  const [formData, setFormData] = useState({
+    addressTo: "",
+    amount: "",
+    keyword: "",
+    message: "",
+  });
+
+  const handleChange = (e, name) => {
+    setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
+  };
 
   const checkIfWalletIsConnected = async () => {
-    if (!ethereum) return alert("Please install Metamask");
+    try {
+      if (!ethereum) return alert("Please install Metamask");
 
-    const accounts = await ethereum.request({ method: "eth_accounts" });
-    if (accounts.length) {
-      setcurrentAccount(accounts[0]);
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+
+      if (accounts.length) {
+        setCurrentAccount(accounts[0]);
+
+        //getAllTransactions();
+      } else {
+        console.log("No accounts found.");
+      }
+
+      console.log(accounts);
+    } catch (error) {
+      console.log(error);
+      throw new Error("No ethereum object.");
     }
-
-    console.log(accounts);
   };
 
   //code below will connect the app to the local metamask ethereum wallet
@@ -53,12 +74,33 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
+  const sendTransaction = async () => {
+    try {
+      if (!ethereum) return alert("Please install Metamask");
+
+      const { addressTo, amount, keyword, message } = formData;
+      getEthereumContract();
+    } catch (error) {
+      console.log(error);
+      throw new Error("No ethereum object.");
+    }
+  };
+
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
 
   return (
-    <TransactionContext.Provider value={{ connectWallet, currentAccount }}>
+    <TransactionContext.Provider
+      value={{
+        connectWallet,
+        currentAccount,
+        formData,
+        setFormData,
+        handleChange,
+        sendTransaction,
+      }}
+    >
       {children}
     </TransactionContext.Provider>
   );
