@@ -17,11 +17,7 @@ const getEthereumContract = () => {
     signer
   );
 
-  console.log({
-    provider,
-    signer,
-    transactionContract,
-  });
+  return transactionContract;
 };
 
 export const TransactionProvider = ({ children }) => {
@@ -79,6 +75,7 @@ export const TransactionProvider = ({ children }) => {
       if (!ethereum) return alert("Please install Metamask");
 
       const { addressTo, amount, keyword, message } = formData;
+      
       getEthereumContract();
     } catch (error) {
       console.log(error);
