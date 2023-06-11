@@ -14,6 +14,7 @@ const commonStyles =
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
+    name="placeholder"
     placeholder={placeholder}
     type={type}
     step="0.00001"

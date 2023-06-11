@@ -40,7 +40,8 @@ contract Transactions {
                 message,
                 block.timestamp,
                 keyword
-            ));
+            )
+        );
         emit Transfer(
             msg.sender,
             receiver,
